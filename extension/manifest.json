@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Vyvaz Scanner",
+  "version": "1.1.5",
+  "description": "Gestão de bases e custos da Vyvaz",
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://vyvaz-server.onrender.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.mercadolivre.com.br/*",
+        "https://mercadolivre.com.br/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Vyvaz"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

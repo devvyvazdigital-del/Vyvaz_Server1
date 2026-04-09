@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vyvaz</title>
+    <style>
+      :root {
+        --purple-deep: #5b2be0;
+        --purple-bright: #7d4dff;
+        --text: #f8fafc;
+        --text-muted: rgba(248, 250, 252, 0.55);
+        --glass: rgba(255, 255, 255, 0.04);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --input-bg: rgba(255, 255, 255, 0.06);
+        --input-border: rgba(255, 255, 255, 0.12);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        width: 380px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 18px;
+        color: var(--text);
+        color-scheme: dark;
+        background: linear-gradient(135deg, #0f0f1a, #1a0f2e, #2a1450);
+        position: relative;
+        min-height: 100%;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(ellipse 120% 80% at 10% -20%, rgba(125, 77, 255, 0.22), transparent 50%),
+          radial-gradient(ellipse 90% 60% at 100% 100%, rgba(91, 43, 224, 0.18), transparent 45%);
+        z-index: 0;
+      }
+
+      .card {
+        position: relative;
+        z-index: 1;
+        background: var(--glass);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 18px;
+        border: 1px solid var(--glass-border);
+        box-shadow:
+          0 24px 48px rgba(0, 0, 0, 0.45),
+          0 0 0 1px rgba(125, 77, 255, 0.06) inset;
+        overflow: hidden;
+      }
+
+      .header {
+        padding: 20px 18px 14px;
+        text-align: center;
+      }
+
+      .header-logo {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 14px;
+      }
+
+      .header-logo svg {
+        display: block;
+        filter: drop-shadow(0 4px 20px rgba(125, 77, 255, 0.35));
+      }
+
+      .brand {
+        min-width: 0;
+      }
+
+      .brand-title {
+        font-weight: 800;
+        font-size: 20px;
+        letter-spacing: -0.4px;
+        line-height: 1.15;
+        color: #fff;
+      }
+
+      .brand-subtitle {
+        margin-top: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.55);
+        letter-spacing: 0.04em;
+      }
+
+      .header-user-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .header-user {
+        display: grid;
+        grid-template-columns: 28px 1fr;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+        max-width: 240px;
+        width: 100%;
+      }
+
+      .user-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(125, 77, 255, 0.35), rgba(91, 43, 224, 0.25));
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      }
+
+      #usuarioNome {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: left;
+      }
+
+      .content {
+        padding: 4px 18px 20px;
+      }
+
+      .section {
+        background: transparent;
+        border: 0;
+        padding: 0;
+      }
+
+      .section + .section {
+        margin-top: 22px;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .section-title strong {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: rgba(255, 255, 255, 0.42);
+      }
+
+      .section-title span {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.38);
+        font-weight: 600;
+      }
+
+      label.small {
+        display: block;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.45);
+        font-weight: 600;
+        margin: 12px 0 8px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 11px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--input-border);
+        background: var(--input-bg);
+        color: #fff;
+        font-size: 13px;
+        outline: none;
+        transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+      }
+
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.32);
+      }
+
+      input:focus,
+      select:focus {
+        border-color: rgba(125, 77, 255, 0.55);
+        box-shadow: 0 0 0 2px rgba(125, 77, 255, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      button {
+        width: 100%;
+        padding: 11px 12px;
+        border-radius: 12px;
+        border: 0;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      button:hover:not(:disabled) {
+        filter: brightness(1.06);
+      }
+
+      button:active:not(:disabled) { transform: translateY(1px); }
+      button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+      .btn-primary {
+        color: #fff;
+        background: linear-gradient(135deg, #7d4dff, #5b2be0);
+        box-shadow:
+          0 0 24px rgba(125, 77, 255, 0.35),
+          0 8px 20px rgba(0, 0, 0, 0.35);
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        filter: brightness(1.12);
+        box-shadow:
+          0 0 32px rgba(125, 77, 255, 0.45),
+          0 10px 24px rgba(0, 0, 0, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .btn-secondary:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.12);
+        filter: none;
+      }
+
+      .btn-danger {
+        background: rgba(255, 80, 80, 0.15);
+        color: #fca5a5;
+        border: 1px solid rgba(255, 80, 80, 0.22);
+      }
+
+      .btn-danger:hover:not(:disabled) {
+        background: rgba(255, 80, 80, 0.22);
+        filter: none;
+      }
+
+      .btn-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .btn-sm {
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+        width: auto;
+      }
+
+      .scanner-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .scanner-left {
+        display: grid;
+        gap: 3px;
+        min-width: 0;
+      }
+
+      .scanner-left .title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      .scanner-left .hint {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.45);
+        font-weight: 500;
+      }
+
+      .toggle-switch {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .toggle-switch input {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-track {
+        width: 44px;
+        height: 26px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        position: relative;
+        display: block;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        transition: background 0.2s, box-shadow 0.2s;
+      }
+
+      .toggle-thumb {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border-radius: 50%;
+        transition: transform 0.2s;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+      }
+
+      .toggle-switch input:checked + .toggle-track {
+        background: rgba(125, 77, 255, 0.45);
+        box-shadow: 0 0 12px rgba(125, 77, 255, 0.35);
+      }
+
+      .toggle-switch input:checked + .toggle-track .toggle-thumb {
+        transform: translateX(18px);
+      }
+
+      .file-upload-area {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 11px 12px;
+        border-radius: 12px;
+        background: var(--input-bg);
+        border: 1px dashed rgba(255, 255, 255, 0.18);
+        cursor: pointer;
+        transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      }
+
+      .file-upload-area:hover {
+        border-color: rgba(125, 77, 255, 0.45);
+        box-shadow: 0 0 0 2px rgba(125, 77, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .file-upload-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .file-badge {
+        width: 28px;
+        height: 28px;
+        border-radius: 10px;
+        background: rgba(125, 77, 255, 0.2);
+        color: #c4b5fd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        border: 1px solid rgba(125, 77, 255, 0.25);
+      }
+
+      #fileUploadText {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.65);
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 200px;
+      }
+
+      .file-upload-cta {
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(196, 181, 253, 0.95);
+        flex-shrink: 0;
+      }
+
+      .empty-state {
+        margin-top: 10px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.4;
+        display: none;
+      }
+
+      .status {
+        margin-top: 14px;
+        font-size: 12px;
+        text-align: center;
+        min-height: 16px;
+        line-height: 1.45;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      .divider {
+        border: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        margin: 20px 0;
+      }
+
+      /* Painel de resultado do scan (tema escuro) */
+      .scan-debug {
+        margin-top: 12px;
+        display: none;
+        background: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.55;
+      }
+
+      .scan-debug-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+      }
+
+      .scan-debug-head span:first-child {
+        font-weight: 700;
+        color: #c4b5fd;
+      }
+
+      #scanTotal {
+        font-size: 14px;
+        font-weight: 800;
+        color: #a78bfa;
+      }
+
+      .scan-debug-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+        text-align: center;
+        margin-top: 8px;
+      }
+
+      .scan-pill {
+        border-radius: 10px;
+        padding: 8px 4px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .scan-pill--green {
+        background: rgba(34, 197, 94, 0.12);
+      }
+
+      .scan-pill--green .scan-pill-val { color: #86efac; font-size: 11px; font-weight: 800; }
+      .scan-pill--green .scan-pill-lbl { font-size: 9px; color: rgba(134, 239, 172, 0.75); margin-top: 2px; }
+
+      .scan-pill--yellow {
+        background: rgba(234, 179, 8, 0.12);
+      }
+
+      .scan-pill--yellow .scan-pill-val { color: #fde047; font-size: 11px; font-weight: 800; }
+      .scan-pill--yellow .scan-pill-lbl { font-size: 9px; color: rgba(253, 224, 71, 0.75); margin-top: 2px; }
+
+      .scan-pill--red {
+        background: rgba(248, 113, 113, 0.12);
+      }
+
+      .scan-pill--red .scan-pill-val { color: #fca5a5; font-size: 11px; font-weight: 800; }
+      .scan-pill--red .scan-pill-lbl { font-size: 9px; color: rgba(252, 165, 165, 0.75); margin-top: 2px; }
+
+      #scanMcMedia {
+        margin-top: 10px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.45);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loginView" class="card" style="display:none;">
+      <!-- Login removido temporariamente -->
+      <div class="status">Login desativado temporariamente.</div>
+    </div>
+
+    <div id="appView" class="card" style="display:block;">
+      <div class="header">
+        <div class="header-logo" aria-hidden="true">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="vyvazLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#7d4dff" />
+                <stop offset="100%" stop-color="#5b2be0" />
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="44" height="44" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(125,77,255,0.45)" stroke-width="1" />
+            <path d="M14 14h6l4.2 12.6L28.4 14H34L26.8 34h-5.6L14 14z" fill="url(#vyvazLogoGrad)" />
+          </svg>
+        </div>
+        <div class="brand">
+          <div class="brand-title">Vyvaz</div>
+          <div class="brand-subtitle">Scanner Inteligente</div>
+        </div>
+        <div class="header-user-row">
+          <div class="header-user" title="Usuário">
+            <div class="user-avatar" id="userAvatar">V</div>
+            <span id="usuarioNome"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <!-- 🔹 Scanner -->
+        <div class="section">
+          <div class="section-title">
+            <strong>Scanner</strong>
+            <span>Mercado Livre</span>
+          </div>
+
+          <div class="scanner-row">
+            <div class="scanner-left">
+              <div class="title">Scanner ativo</div>
+              <div class="hint">Mostra MC/LC direto nos cards</div>
+            </div>
+            <label class="toggle-switch" aria-label="Ativar scanner">
+              <input type="checkbox" id="scannerToggle" checked />
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+
+          <div style="margin-top:10px;">
+            <button id="btnScan" class="btn-primary">Escanear página</button>
+          </div>
+
+          <div id="scanDebug" class="scan-debug" style="display: none;">
+            <div class="scan-debug-head">
+              <span>Resultado do scan</span>
+              <span id="scanTotal">0</span>
+            </div>
+            <div class="scan-debug-grid">
+              <div class="scan-pill scan-pill--green">
+                <div class="scan-pill-val" id="scanSaudavel">0</div>
+                <div class="scan-pill-lbl">Saudável</div>
+              </div>
+              <div class="scan-pill scan-pill--yellow">
+                <div class="scan-pill-val" id="scanAtencao">0</div>
+                <div class="scan-pill-lbl">Atenção</div>
+              </div>
+              <div class="scan-pill scan-pill--red">
+                <div class="scan-pill-val" id="scanCritico">0</div>
+                <div class="scan-pill-lbl">Crítico</div>
+              </div>
+            </div>
+            <div id="scanMcMedia"></div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 🔹 Bases -->
+        <div class="section">
+          <div class="section-title">
+            <strong>Bases</strong>
+            <span>Selecione a base ativa</span>
+          </div>
+
+          <label class="small" for="filtroBase">Filtrar</label>
+          <input id="filtroBase" type="text" placeholder="Filtrar bases..." />
+
+          <label class="small" for="basesSelect">Base</label>
+          <select id="basesSelect">
+            <option value="">Selecionar base</option>
+          </select>
+
+          <div id="emptyBases" class="empty-state">Nenhuma base carregada</div>
+
+          <div class="btn-row" style="margin-top:10px;">
+            <button id="btnAtualizarBases" class="btn-secondary">Atualizar</button>
+            <button id="btnUsarBase" class="btn-primary">Usar base</button>
+          </div>
+
+          <div style="margin-top:8px;">
+            <button id="btnDesabilitarBase" class="btn-secondary">Desabilitar base</button>
+          </div>
+
+          <div style="margin-top:8px;">
+            <button id="btnExcluirBase" class="btn-danger">Excluir base</button>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 🔹 Nova base -->
+        <div class="section">
+          <div class="section-title">
+            <strong>Nova base</strong>
+            <span>Importar planilha</span>
+          </div>
+
+          <label class="small" for="novaBaseNome">Nome da base</label>
+          <input id="novaBaseNome" type="text" placeholder="Ex.: cliente_xpto" />
+
+          <label class="small" for="novaBaseArquivo">Planilha</label>
+          <label class="file-upload-area" id="fileUploadLabel">
+            <div class="file-upload-left">
+              <span class="file-badge">⤓</span>
+              <span id="fileUploadText">Escolher planilha (.xlsx, .csv)</span>
+            </div>
+            <span class="file-upload-cta">Selecionar</span>
+            <input id="novaBaseArquivo" type="file" accept=".xlsx,.xls,.csv" style="display:none;">
+          </label>
+
+          <div style="margin-top:10px;">
+            <button id="btnCriarBaseImportar" class="btn-primary">Criar base</button>
+          </div>
+        </div>
+
+        <div id="statusApp" class="status"></div>
+      </div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
