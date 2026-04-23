@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vyvaz — Portal</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%237c3aed'/><text x='16' y='22' font-size='18' fill='white' text-anchor='middle' font-weight='bold'>V</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">V</div>
+      <span class="brand-text">Vyvaz</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-page="dashboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+        Dashboard
+      </a>
+      <a href="#" class="nav-item" data-page="bases">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+        Bases
+      </a>
+      <a href="#" class="nav-item" data-page="importar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        Importar
+      </a>
+      <a href="#" class="nav-item" data-page="extensao">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+        Extensão
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-status" id="serverStatus">
+        <span class="status-dot"></span>
+        Verificando...
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN ─── -->
+  <main class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <div class="topbar-right">
+        <span class="topbar-env" id="apiUrl"></span>
+      </div>
+    </header>
+
+    <!-- DASHBOARD PAGE -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <p>Visão geral do sistema Vyvaz</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="--accent:#7c3aed;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="statBases">—</span>
+            <span class="stat-label">Bases ativas</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="--accent:#059669;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="statItens">—</span>
+            <span class="stat-label">Total de SKUs</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="--accent:#d97706;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="statUltima">—</span>
+            <span class="stat-label">Última importação</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="--accent:#0ea5e9;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="statServer">—</span>
+            <span class="stat-label">Status servidor</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BASES TABLE -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Bases cadastradas</h2>
+          <button class="btn btn-sm" onclick="loadDashboard()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"></path></svg>
+            Atualizar
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Slug</th>
+                  <th>Criada em</th>
+                  <th class="text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="basesTableBody">
+                <tr><td colspan="4" class="empty-state">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BASES DETAIL PAGE -->
+    <section class="page" id="page-bases">
+      <div class="page-header">
+        <h1>Bases</h1>
+        <p>Visualize e gerencie suas bases de custos</p>
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <div class="card-header">
+          <h2>Selecione uma base</h2>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+            <div style="flex:1;min-width:220px;">
+              <label class="field-label">Base</label>
+              <select id="baseSelectDetail" class="field-input">
+                <option value="">Selecione...</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" onclick="loadBaseDetail()">Carregar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="baseDetailCard" style="display:none;">
+        <div class="card-header">
+          <h2 id="baseDetailTitle">—</h2>
+          <span class="badge" id="baseDetailCount">0 itens</span>
+        </div>
+        <div class="card-body">
+          <input type="text" class="field-input" id="filterItens" placeholder="Filtrar por produto ID..." oninput="filterTable()" style="margin-bottom:16px;max-width:360px;">
+          <div class="table-wrap" style="max-height:520px;overflow-y:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Produto ID</th>
+                  <th class="text-right">Custo (R$)</th>
+                  <th class="text-right">Imposto (%)</th>
+                  <th class="text-right">Taxa Fixa (R$)</th>
+                </tr>
+              </thead>
+              <tbody id="itensTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMPORT PAGE -->
+    <section class="page" id="page-importar">
+      <div class="page-header">
+        <h1>Importar Planilha</h1>
+        <p>Importe uma planilha (.xlsx, .csv) para criar ou atualizar uma base</p>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="import-form">
+            <div>
+              <label class="field-label">Nome da base</label>
+              <input type="text" class="field-input" id="importNomeBase" placeholder="Ex.: cliente_xpto">
+            </div>
+            <div>
+              <label class="field-label">Planilha</label>
+              <div class="file-drop" id="fileDrop">
+                <input type="file" id="importArquivo" accept=".xlsx,.xls,.csv" style="display:none;">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <span id="fileDropLabel">Clique ou arraste o arquivo aqui</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;">
+              <button class="btn btn-primary" id="btnPreview" onclick="previewImport()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                Preview
+              </button>
+              <button class="btn btn-success" id="btnConfirmar" onclick="confirmarImport()" disabled>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Confirmar importação
+              </button>
+            </div>
+          </div>
+          <div id="importStatus" class="import-status" style="display:none;"></div>
+          <div id="previewArea" style="display:none;">
+            <div class="card-header" style="padding:16px 0 8px;">
+              <h2>Preview</h2>
+              <span class="badge" id="previewCount">0 itens</span>
+            </div>
+            <div class="table-wrap" style="max-height:360px;overflow-y:auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Produto ID</th>
+                    <th class="text-right">Custo</th>
+                    <th class="text-right">Imposto</th>
+                    <th class="text-right">Taxa</th>
+                  </tr>
+                </thead>
+                <tbody id="previewTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXTENSAO PAGE -->
+    <section class="page" id="page-extensao">
+      <div class="page-header">
+        <h1>Extensão Chrome</h1>
+        <p>Download e instalação da extensão Vyvaz Scanner</p>
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <div class="card-header">
+          <h2>Download</h2>
+        </div>
+        <div class="card-body">
+          <p style="color:var(--text-2);margin-bottom:16px;">Baixe a extensão e instale no Chrome para escanear anúncios do Mercado Livre e visualizar seus custos em tempo real.</p>
+          <a href="#" class="btn btn-primary" id="btnDownloadExtensao" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Baixar extensão (.zip)
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Como instalar</h2>
+        </div>
+        <div class="card-body">
+          <div class="steps">
+            <div class="step"><span class="step-num">1</span><span>Baixe o arquivo .zip clicando no botão acima</span></div>
+            <div class="step"><span class="step-num">2</span><span>Descompacte a pasta em um local fixo no computador</span></div>
+            <div class="step"><span class="step-num">3</span><span>Abra o Chrome e acesse <code>chrome://extensions</code></span></div>
+            <div class="step"><span class="step-num">4</span><span>Ative o <strong>"Modo do desenvolvedor"</strong> no canto superior direito</span></div>
+            <div class="step"><span class="step-num">5</span><span>Clique em <strong>"Carregar sem compactação"</strong> e selecione a pasta</span></div>
+            <div class="step"><span class="step-num">6</span><span>A extensão aparecerá na lista — pronto!</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
